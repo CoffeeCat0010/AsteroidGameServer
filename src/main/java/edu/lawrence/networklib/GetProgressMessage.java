@@ -3,11 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.lawrence.asteroidgameserver.Network.Messages;
-
-import edu.lawrence.asteroidgameserver.Network.Messages.Message;
-import edu.lawrence.asteroidgameserver.Network.NetworkConsts;
-import edu.lawrence.asteroidgameserver.Network.NetworkConsts;
+package edu.lawrence.networklib;
 
 /**
  *

@@ -13,29 +13,47 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author Justin
  */
 public class Game {
-    private ReadWriteLock lock;
+    private ReadWriteLock progressLock;
+    private ReadWriteLock startLock;
 
-    private int progress;
+    private boolean started;
+
+    private int[] progress;
     public Game(){
-        lock = new ReentrantReadWriteLock();
+        progress = new int[]{0 , 0};
+        progressLock = new ReentrantReadWriteLock();
+        startLock = new ReentrantReadWriteLock();
+
     }
-    public int getProgress() {
+    public int getProgress(int id) {
         int result = 0;
         try{
-            lock.readLock().lock();
-            result = progress;
+            progressLock.readLock().lock();
+            result = progress[id];
         }finally{
-            lock.readLock().unlock();
+            progressLock.readLock().unlock();
         }
         return result;
     }
 
-    public void setProgress(int progress) {
+    public void setProgress(int newProgress, int id) {
         try{
-            lock.writeLock().lock();
-            this.progress = progress;
+            progressLock.writeLock().lock();
+            progress[id] = newProgress;
         }finally{
-            lock.writeLock().unlock();
+            progressLock.writeLock().unlock();
         }
+    }
+    public void start(){
+        startLock.writeLock().lock();
+        started=true;
+        startLock.writeLock().unlock();
+
+    }
+    public boolean isStarted(){
+        startLock.readLock().lock();
+        boolean result = started;
+        startLock.readLock().unlock();
+        return result;
     }
 }

@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.lawrence.asteroidgameserver.Network.Messages;
+package edu.lawrence.networklib;
 
-import edu.lawrence.asteroidgameserver.Network.NetworkConsts;
+import java.io.Serializable;
 
 /**
  *
  * @author Justin
  */
-public class Message implements NetworkConsts{
+public class Message implements NetworkConsts, Serializable{
     private final int messageType;
     
-    protected Message(int messageType){
+    public Message(int messageType){
         this.messageType = messageType;
     }
 
