@@ -37,10 +37,12 @@ public class ConnectionManager implements Runnable, NetworkConsts {
     
     @Override
     public void run() {
+        ObjectInputStream OIS = null;
+        ObjectOutputStream OOS= null;
         try{
             address = socket.getRemoteSocketAddress().toString();
-            ObjectOutputStream OOS = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream OIS = new ObjectInputStream(socket.getInputStream());
+            OOS = new ObjectOutputStream(socket.getOutputStream());
+            OIS = new ObjectInputStream(socket.getInputStream());
             while(!game.isStarted());
             toSend.add(new Message(NetworkConsts.START));
             System.out.println("Game Started");
@@ -61,6 +63,7 @@ public class ConnectionManager implements Runnable, NetworkConsts {
                         //Platform.runLater(new ServerUserMessage("Progress updated to: " + game.getProgress(playerNumber) , App.getListPane()));
                     }
                 }
+                if (game.getWinner() != 2) toSend.add(new Message(game.getWinner() == playerNumber ? NetworkConsts.WINNER : NetworkConsts.LOSER)); 
                 Message[] result = toSend.toArray(new Message[0]);
                 OOS.writeObject(result);
             }
@@ -69,6 +72,14 @@ public class ConnectionManager implements Runnable, NetworkConsts {
             Platform.runLater(new ServerUserMessage("Connection Closed Unexpectedly: " + address, App.getListPane()));
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
+        }finally{
+            try {
+                OIS.close();
+                OOS.close();
+                socket.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
     

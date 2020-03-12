@@ -25,6 +25,14 @@ public class Game {
         startLock = new ReentrantReadWriteLock();
 
     }
+    
+    public int getWinner(){
+        for(int i = 0; i <2;  i++){
+            if(progress[i] >= 1000) return i;
+        }
+        return 2;
+    }
+    
     public int getProgress(int id) {
         int result = 0;
         try{
